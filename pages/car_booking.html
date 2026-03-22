@@ -16,13 +16,13 @@
 
         <!-- Mobile Menu Button -->
         <button id="mobile-btn"
-            class="md:hidden text-white hover:text-[#cba472] transition duration-300 relative z-[60] focus:outline-none">
-            <svg id="icon-menu" class="w-8 h-8 transition-transform duration-300" fill="none" stroke="currentColor"
+            class="lg:hidden text-white hover:text-[#cba472] transition duration-300 relative z-[60] focus:outline-none">
+            <svg id="icon-menu" class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
                 </path>
             </svg>
-            <svg id="icon-close" class="hidden w-6 h-6 transition-transform duration-300 rotate-90" fill="none"
+            <svg id="icon-close" class="hidden w-8 h-8 transition-transform duration-300 rotate-90" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
@@ -30,24 +30,23 @@
 
         <!-- Logo -->
         <div
-            class="text-1xl md:text-3xl font-serif text-white hover:text-[#cba472] tracking-widest flex-1 text-center md:flex-none md:text-left relative z-[60] cursor-pointer">
-            <a href="../index.html">BAAN PAI MAI</a>
+            class="text-1xl lg:text-3xl font-serif text-white hover:text-[#cba472] tracking-widest flex-1 text-center lg:flex-none lg:text-left relative z-[60]">
+            <a href="#home">BAAN PAI MAI</a>
         </div>
 
-        <div class="w-8 md:hidden"></div>
+        <div class="w-8 lg:hidden"></div>
 
         <!-- Desktop Menu -->
-        <ul class="hidden md:flex items-center gap-8 text-xs font-bold text-white uppercase tracking-widest">
-            <li><a href="../index.html" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">HOME</a>
+        <ul class="hidden lg:flex items-center gap-8 text-xs font-bold text-white uppercase tracking-widest">
+            <li><a href="#home" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">HOME</a></li>
+            <li><a href="pages/car_booking.html" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">CAR
+                    BOOKING</a></li>
+            <li><a href="#Dripper" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">HOW TO DRIP</a>
             </li>
-            <li><a href="car_booking.html" class="text-[#cba472] transition duration-300 drop-shadow-md">CAR BOOKING</a>
-            </li>
-            <li><a href="../index.html#Dripper" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">HOW
-                    TO DRIP</a></li>
-            <li><a href="../index.html#location" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">LOCATION</a>
+            <li><a href="#location" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">LOCATION</a>
             </li>
             <li><a href="#contact" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">CONTACT</a></li>
-            <li><a href="my_booking.html">
+            <li><a href="pages/my_booking.html">
                     <button id="btn-my-booking"
                         class="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-[#2c2c2c] transition duration-300 shadow-lg">
                         MY BOOKING
@@ -58,20 +57,20 @@
 
         <!-- Mobile Menu Overlay -->
         <div id="mobile-menu"
-            class="fixed inset-0 bg-[#2c2c2c]/95 backdrop-blur-md z-50 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-500 md:hidden">
-            <a href="../index.html"
+            class="fixed inset-0 bg-[#2c2c2c]/95 backdrop-blur-md z-50 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-500 lg:hidden">
+            <a href="#home"
                 class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">HOME</a>
-            <a href="car_booking.html"
-                class="text-2xl font-serif text-[#cba472] uppercase tracking-widest transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">CAR
+            <a href="pages/car_booking.html"
+                class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">CAR
                 BOOKING</a>
-            <a href="#Find_Us"
+            <a href="#location"
                 class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">LOCATION</a>
-            <a href="../index.html#Dripper"
+            <a href="#Dripper"
                 class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">HOW
                 TO DRIP</a>
-            <a href="#CONTACT"
+            <a href="#contact"
                 class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">CONTACT</a>
-            <a href="my_booking.html">
+            <a href="pages/my_booking.html">
                 <button id="btn-my-booking"
                     class="mt-8 border border-[#cba472] text-[#cba472] px-12 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-[#cba472] hover:text-white transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link shadow-lg">
                     MY BOOKING
