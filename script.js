@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
   // ส่วนที่ 3: ACTIVE STATE (Scroll Spy)
   // ==========================================
-  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  /* const navLinks = document.querySelectorAll('nav a[href^="#"]');
 
   function onScroll() {
     let currentSectionId = "";
@@ -121,6 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
+ */
   window.addEventListener("scroll", onScroll);
 });
