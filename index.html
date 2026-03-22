@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAAN PAI MAI</title>
+  <link href="../dist/output.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ===== HERO HEADER ===== -->
+  <header id="home" class="relative min-h-screen flex flex-col font-sans"
+    style="background-image: url('./assets/img/hero.jpg'); background-size: cover; background-position: center;">
+    <div class="absolute inset-0 bg-black/40"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav
+      class="fixed top-0 left-0 w-full z-[100] flex items-center justify-between px-6 md:px-10 pt-6 pb-10 md:pt-8 md:pb-10 bg-gradient-to-b from-black/90 via-black/40 to-transparent">
+
+      <!-- Mobile Menu Button -->
+      <button id="mobile-btn"
+        class="md:hidden text-white hover:text-[#cba472] transition duration-300 relative z-[60] focus:outline-none">
+        <svg id="icon-menu" class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg id="icon-close" class="hidden w-8 h-8 transition-transform duration-300 rotate-90" fill="none"
+          stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <!-- Logo -->
+      <div
+        class="text-1xl md:text-3xl font-serif text-white hover:text-[#cba472] tracking-widest flex-1 text-center md:flex-none md:text-left relative z-[60]">
+        <a href="#home">BAAN PAI MAI</a>
+      </div>
+
+      <div class="w-8 md:hidden"></div>
+
+      <!-- Desktop Menu -->
+      <ul class="hidden md:flex items-center gap-8 text-xs font-bold text-white uppercase tracking-widest">
+        <li><a href="#home" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">HOME</a></li>
+        <li><a href="pages/car_booking.html" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">CAR
+            BOOKING</a></li>
+        <li><a href="#Dripper" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">HOW TO DRIP</a></li>
+        <li><a href="#location" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">LOCATION</a></li>
+        <li><a href="#contact" class="hover:text-[#cba472] transition duration-300 drop-shadow-md">CONTACT</a></li>
+        <li><a href="pages/my_booking.html">
+            <button id="btn-my-booking"
+              class="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-[#2c2c2c] transition duration-300 shadow-lg">
+              MY BOOKING
+            </button>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Mobile Menu Overlay -->
+      <div id="mobile-menu"
+        class="fixed inset-0 bg-[#2c2c2c]/95 backdrop-blur-md z-50 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-500 md:hidden">
+        <a href="#home"
+          class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">HOME</a>
+        <a href="pages/car_booking.html"
+          class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">CAR
+          BOOKING</a>
+        <a href="#location"
+          class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">LOCATION</a>
+        <a href="#Dripper"
+          class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">HOW
+          TO DRIP</a>
+        <a href="#contact"
+          class="text-2xl font-serif text-white uppercase tracking-widest hover:text-[#cba472] transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link">CONTACT</a>
+        <a href="pages/my_booking.html">
+          <button id="btn-my-booking"
+            class="mt-8 border border-[#cba472] text-[#cba472] px-12 py-4 rounded-full text-sm font-bold uppercase tracking-widest hover:bg-[#cba472] hover:text-white transition-all duration-500 ease-out transform translate-y-10 opacity-0 mobile-link shadow-lg">
+            MY BOOKING
+          </button>
+        </a>
+      </div>
+
+    </nav>
+    <!-- ===== END NAVBAR ===== -->
+
+    <!-- Hero Text & CTA -->
+    <div
+      class="relative z-10 flex-1 flex flex-col justify-center items-center text-center md:items-start md:text-left px-6 md:px-20 pb-20">
+      <h1
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 ease-out text-3xl md:text-8xl font-serif text-white drop-shadow-lg leading-tight md:leading-normal cursor-pointer">
+        BAAN PAI MAI
+      </h1>
+      <h2
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-100 ease-out text-base md:text-4xl font-serif text-[#cba472] mt-4 opacity-90 cursor-pointer">
+        Slow life by the lake
+      </h2>
+      <div class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-200 ease-out mt-8">
+        <p class="text-[10px] text-[#dadada] font-bold uppercase tracking-widest mb-1 cursor-pointer">Open Daily</p>
+        <p class="text-sm font-bold text-white tracking-widest cursor-pointer">09:00 AM - 06:00 PM</p>
+      </div>
+      <div
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-300 ease-out mt-10 flex flex-col md:flex-row items-center gap-4 md:gap-6 w-full max-w-xs md:max-w-none">
+        <a href="pages/car_booking.html"
+          class="w-full md:w-auto text-center bg-[#cba472] text-white px-8 py-4 md:py-3 rounded-full text-xs font-bold uppercase tracking-widest shadow-xl hover:bg-[#3a2a18] transition duration-300">
+          CAR BOOKING
+        </a>
+        <a href="https://maps.app.goo.gl/jeazZwo5tBS7DtA97"
+          class="w-full md:w-auto text-center text-white border border-white px-8 py-4 md:py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-[#2c2c2c] transition duration-300 shadow-lg">
+          Explore Map
+        </a>
+      </div>
+    </div>
+
+  </header>
+  <!-- ===== END HERO HEADER ===== -->
+
+
+  <!-- ===== SIGNATURE MENU SECTION ===== -->
+  <section class="py-20 md:py-24 bg-[#F9F8F6] font-sans overflow-hidden">
+    <h2
+      class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 ease-out text-3xl md:text-5xl font-serif text-center text-[#2c2c2c] mb-16 md:mb-20 tracking-wide">
+      Signature Menu
+    </h2>
+    <div class="max-w-5xl mx-auto px-6 md:px-8 space-y-20 md:space-y-32">
+
+      <!-- Menu Item 1 - Classic Iced Latte -->
+      <div
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-100 ease-out grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center text-center md:text-left">
+        <div class="w-full h-[300px] md:h-[400px] rounded-2xl shadow-md overflow-hidden relative group">
+          <img src="./assets/img/Coffee_1.jpg" alt="Signature Coffee"
+            class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
+        </div>
+        <div class="flex flex-col justify-center">
+          <h3 class="text-2xl md:text-3xl font-serif text-[#2c2c2c] mb-4 md:mb-6">
+            ชุดกาแฟดริปทำเอง <span class="text-xl">(Hand-Drip Coffee)</span>
+          </h3>
+          <p class="text-[#2c2c2c]/80 leading-relaxed text-sm md:text-base px-4 md:px-0">
+            เปิดประสบการณ์การดื่มกาแฟที่สนุกกว่าเดิม ด้วยชุดดริปกาแฟ DIY ที่ให้คุณสกัดความหอมกรุ่นด้วยมือคุณเอง
+            ชงสดใหม่แก้วต่อแก้ว พร้อมซึมซับธรรมชาติรอบตัว
+          </p>
+        </div>
+      </div>
+
+      <!-- Menu Item 2 - Homemade Croissant -->
+      <div
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-100 ease-out grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center text-center md:text-left">
+        <div class="flex flex-col justify-center order-2 md:order-1">
+          <h3 class="text-2xl md:text-3xl font-serif text-[#2c2c2c] mb-4 md:mb-6">
+            Baan Pai Mai Local Set
+          </h3>
+          <p class="text-[#2c2c2c]/80 leading-relaxed text-sm md:text-base px-4 md:px-0">
+            สำรับอาหารพื้นบ้านที่สะท้อนวิถีชุมชนอย่างแท้จริง
+            เสิร์ฟความอร่อยด้วยวัตถุดิบโลคอลอย่างปลาร้าบองและปลาทอดจากฝีมือชาวบ้านละแวกเขื่อน
+            จัดมาในสไตล์บ้านปายไม้ที่เรียบง่ายแต่รสชาติประทับใจแน่นอน
+          </p>
+        </div>
+        <div
+          class="w-full h-[300px] md:h-[400px] rounded-2xl shadow-md overflow-hidden relative group order-1 md:order-2">
+          <img src="./assets/img/food.jpg" alt="Homemade Croissant"
+            class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- ===== END SIGNATURE MENU SECTION ===== -->
+
+
+  <!-- ===== DRIP IT YOURSELF SECTION ===== -->
+
+  <section id="Dripper" class="py-20 md:py-24 bg-[#e5e7e5] font-sans overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 md:px-8 text-center">
+      <h2
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 ease-out text-3xl md:text-5xl font-serif text-[#2c2c2c] mb-2">
+        Drip It Yourself
+      </h2>
+      <p
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-100 ease-out italic text-[#8ba37a] font-serif mb-12 md:mb-16 text-base md:text-lg">
+        The Art of Thai Coffee Brewing
+      </p>
+
+      <div class="relative flex flex-col md:flex-row justify-between items-center md:items-start gap-12 md:gap-0">
+        <div class="hidden md:block absolute top-10 left-[10%] right-[10%] h-[1px] bg-[#8ba37a]/30 z-0"></div>
+
+        <!-- Step 01 -->
+
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-[200ms] ease-out relative z-10 flex flex-col items-center w-full md:w-40 text-center group">
+          <div
+            class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-[#8ba37a] group-hover:bg-[#8ba37a] group-hover:text-white transition duration-300">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 7v10M7 12h10M9.5 9.5l5 5M14.5 9.5l-5 5"></path>
+            </svg>
+          </div>
+          <p class="text-[10px] font-bold text-[#8ba37a] uppercase tracking-widest mb-1">Step 01</p>
+          <h4 class="text-base md:text-sm font-bold text-[#2c2c2c]">บดเมล็ดกาแฟ</h4>
+          <p class="text-sm md:text-xs text-[#2c2c2c]/60 mt-1">Coffee Grinder</p>
+        </div>
+
+        <!-- Step 02 -->
+
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-[300ms] ease-out relative z-10 flex flex-col items-center w-full md:w-40 text-center group">
+          <div
+            class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-[#8ba37a] group-hover:bg-[#8ba37a] group-hover:text-white transition duration-300">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <polygon points="2 3 22 3 14 14 14 21 10 21 10 14 2 3" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"></polygon>
+            </svg>
+          </div>
+          <p class="text-[10px] font-bold text-[#8ba37a] uppercase tracking-widest mb-1">Step 02</p>
+          <h4 class="text-base md:text-sm font-bold text-[#2c2c2c]">วางดริปเปอร์และกระดาษฟิลเตอร์ลงบนแก้ว</h4>
+          <p class="text-sm md:text-xs text-[#2c2c2c]/60 mt-1">Setup Dripper</p>
+        </div>
+
+        <!-- Step 03 -->
+
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-[400ms] ease-out relative z-10 flex flex-col items-center w-full md:w-40 text-center group">
+          <div
+            class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-[#8ba37a] group-hover:bg-[#8ba37a] group-hover:text-white transition duration-300">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v9M9 9l3 3 3-3M5 14a7 7 0 0 0 14 0H5z"></path>
+            </svg>
+          </div>
+          <p class="text-[10px] font-bold text-[#8ba37a] uppercase tracking-widest mb-1">Step 03</p>
+          <h4 class="text-base md:text-sm font-bold text-[#2c2c2c]">เทผงกาแฟที่บดเตรียมไว้ลงในฟิลเตอร์</h4>
+          <p class="text-sm md:text-xs text-[#2c2c2c]/60 mt-1">Add Coffee</p>
+        </div>
+
+        <!-- Step 04 -->
+
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-[500ms] ease-out relative z-10 flex flex-col items-center w-full md:w-40 text-center group">
+          <div
+            class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-[#8ba37a] group-hover:bg-[#8ba37a] group-hover:text-white transition duration-300">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+          </div>
+          <p class="text-[10px] font-bold text-[#8ba37a] uppercase tracking-widest mb-1">Step 04</p>
+          <h4 class="text-base md:text-sm font-bold text-[#2c2c2c]">รินน้ำร้อนวนเบาๆ เพื่อบลูมและสกัดกาแฟ</h4>
+          <p class="text-sm md:text-xs text-[#2c2c2c]/60 mt-1">Bloom & Drip</p>
+        </div>
+
+        <!-- Step 05 -->
+
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-[600ms] ease-out relative z-10 flex flex-col items-center w-full md:w-40 text-center group">
+          <div
+            class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-[#8ba37a] group-hover:bg-[#8ba37a] group-hover:text-white transition duration-300">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"></path>
+            </svg>
+          </div>
+          <p class="text-[10px] font-bold text-[#8ba37a] uppercase tracking-widest mb-1">Step 05</p>
+          <h4 class="text-base md:text-sm font-bold text-[#2c2c2c]">กาแฟดริปหอมกรุ่นฝีมือคุณ พร้อมทาน!</h4>
+          <p class="text-sm md:text-xs text-[#2c2c2c]/60 mt-1">Ready to Enjoy</p>
+        </div>
+      </div>
+
+      <button
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-100 ease-out mt-12 md:mt-16 border-2 border-[#8ba37a]/30 text-[#8ba37a] px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#8ba37a] hover:text-white transition duration-300 inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+            clip-rule="evenodd"></path>
+        </svg>
+        Watch Video Guide
+      </button>
+    </div>
+  </section>
+  <!-- ===== END DRIP IT YOURSELF SECTION ===== -->
+
+
+  <!-- ===== CAR BOOKING SECTION ===== -->
+  <section id="car_section" class="py-20 md:py-24 bg-[#f8f8f8] font-sans overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 md:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center text-center md:text-left">
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 ease-out order-2 md:order-1 flex flex-col items-center md:items-start">
+          <h2 class="text-3xl md:text-5xl font-serif text-[#2c2c2c] mb-6">CAR BOOKING</h2>
+          <p class="text-[#2c2c2c]/70 leading-relaxed mb-10 max-w-md">
+            เติมเต็มวันพักผ่อนของคุณด้วยการนั่งรถจี๊ปคลาสสิกสุดวินเทจ <br>
+            จะแวะเก็บภาพสวยๆ หรือนั่งรับลมชิลๆ ชมวิวริมเขื่อน <br>
+            ก็ได้ประสบการณ์สโลว์ไลฟ์ที่ไม่เหมือนใคร
+          </p>
+          <div class="space-y-6 mb-12 text-left w-full">
+
+            <!-- Feature 1 - Photo Shoot -->
+            <div class="flex gap-5 items-start">
+              <div
+                class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm text-[#8ba37a]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                  </path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-[#2c2c2c]">Photo Shoot Packages</h4>
+                <p class="text-xs text-[#2c2c2c]/60 mt-1">รวมบริการคนขับพาไปยังจุดถ่ายรูปมุมสวยๆ ริมเขื่อน</p>
+              </div>
+            </div>
+
+            <!-- Feature 2 - City Tours -->
+            <div class="flex gap-5 items-start">
+              <div
+                class="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm text-[#8ba37a]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 22h14"></path>
+                  <path d="M5 2h14"></path>
+                  <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
+                  <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-[#2c2c2c]">City Tours</h4>
+                <p class="text-xs text-[#2c2c2c]/60 mt-1">สัมผัสเสน่ห์ของวิวหลักล้านริมน้ำแบบส่วนตัวตลอด 1 ชั่วโมงเต็ม
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- BTN BOOKING CAR -->
+          <a href="pages/car_booking.html"
+            class="group w-full md:w-auto inline-flex items-center justify-center gap-3 bg-[#cba472] text-white px-10 py-4 md:py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-[#8ba37a] hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+            Reserve
+            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </a>
+
+        </div>
+
+        <!-- Car Image -->
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-200 ease-out w-full h-[300px] md:h-[500px] rounded-3xl overflow-hidden shadow-lg group order-1 md:order-2">
+          <img src="./assets/img/car_1.png" alt="Classic Car"
+            class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-in-out">
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ===== END CAR BOOKING SECTION ===== -->
+
+
+  <!-- ===== LOCATION SECTION ===== -->
+  <section id="location" class="py-20 md:py-24 bg-[#e5e7e5] font-sans overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 md:px-8">
+      <h2
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 ease-out text-3xl md:text-5xl font-serif text-center text-[#2c2c2c] mb-12 md:mb-16">
+        LOCATION
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+
+        <!-- Location Card 1 -->
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-100 ease-out flex flex-col group cursor-pointer text-left md:text-left">
+          <div class="w-full aspect-square bg-white rounded-[2rem] shadow-sm overflow-hidden mb-6 relative">
+            <img src="./assets/img/Map01.png" alt="Location 1"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+          </div>
+          <p class="font-serif text-[#2c2c2c] text-base md:text-lg leading-snug px-4 md:px-0">
+            ขับมาตามเส้น 2109 จุดสังเกตง่ายๆ <br class="hidden md:block">
+            คือเมื่อถึงแยกที่มี Big C mini ให้เตรียมตัวเลี้ยวซ้ายเข้าเส้น 2063 มุ่งหน้าสู่ถนน 2063
+          </p>
+        </div>
+
+        <!-- Location Card 2 -->
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-[200ms] ease-out flex flex-col group cursor-pointer text-left md:text-left">
+          <div class="w-full aspect-square bg-white rounded-[2rem] shadow-sm overflow-hidden mb-6 relative">
+            <img src="./assets/img/Map002.jpg" alt="Location 2"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+          </div>
+          <p class="font-serif text-[#2c2c2c] text-base md:text-lg leading-snug px-4 md:px-0">
+            ขับรถรับลมมาเรื่อยๆ บนเส้นทางหลวง <br class="hidden md:block">
+            หมายเลข 2065 ตรงไปจนเลยป้ายวัดเขื่อนอุบลรัตน์ เมื่อถึงสุดถนนให้เลี้ยวขวาเพื่อเข้าสู่บ้านปายไม้
+          </p>
+        </div>
+
+        <!-- Location Card 3 -->
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-[300ms] ease-out flex flex-col group cursor-pointer text-left md:text-left">
+          <div class="w-full aspect-square bg-white rounded-[2rem] shadow-sm overflow-hidden mb-6 relative">
+            <img src="./assets/img/Map03.jpg" alt="Location 3"
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+          </div>
+          <p class="font-serif text-[#2c2c2c] text-base md:text-lg leading-snug px-4 md:px-0">
+            ขับตรงมาตามถนนหมายเลข 2063 <br class="hidden md:block">
+            เมื่อผ่านป้ายทางเข้าหาดโนนทัน ให้เตรียมตัวเลี้ยวเข้าซอยถัดไป <br class="hidden md:block">
+            จากนั้นขับตรงเข้าไปตามทางเรื่อยๆ ก็จะพบกับร้านบ้านปายไม้
+          </p>
+        </div>
+
+      </div>
+      <div
+        class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-500 ease-out mt-12 md:mt-16 text-center">
+        <button
+          class="border border-[#2c2c2c]/30 text-[#2c2c2c] px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-[#8ba37a] hover:text-white hover:border-[#8ba37a] transition duration-300">
+          <a href="https://maps.app.goo.gl/jeazZwo5tBS7DtA97">
+            Open in Google Maps
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+  <!-- ===== END LOCATION SECTION ===== -->
+
+
+  <!-- ===== FOOTER / CONTACT ===== -->
+  <footer id="contact"
+    class="bg-[#f8f8f8] font-sans pt-16 md:pt-20 pb-8 rounded-t-[2rem] md:rounded-none -mt-6 md:mt-0 relative z-20">
+    <div class="max-w-6xl mx-auto px-6 md:px-8 text-center md:text-left">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12 md:mb-16">
+
+        <!-- Footer - About -->
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 ease-out flex flex-col items-center md:items-start">
+          <h3 class="text-2xl font-serif text-[#2c2c2c] mb-4">Baan Pai Mai</h3>
+          <p class="text-sm text-[#2c2c2c]/60 leading-relaxed max-w-xs">
+            คาเฟ่บ้านไม้สไตล์วินเทจริมเขื่อน สัมผัสวิถีสโลว์ไลฟ์ <br>
+            ผ่านการดริปกาแฟด้วยตัวเอง พร้อมบริการทริปนั่งรถจี๊ป
+            สุดคลาสสิก ให้ทุกการพักผ่อนของคุณเป็นความทรงจำ <br>
+            ที่น่าประทับใจ
+          </p>
+        </div>
+
+        <!-- Footer - Contact Info -->
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-100 ease-out flex flex-col items-center md:items-start">
+          <h3 class="text-2xl font-serif text-[#2c2c2c] mb-4">Contact</h3>
+          <div class="flex items-center gap-2 text-[#2c2c2c]/60 mb-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+              </path>
+            </svg>
+            <span class="text-xs uppercase tracking-widest">+66 81 234 5678</span>
+          </div>
+          <p class="text-[10px] text-[#2c2c2c]/50 uppercase tracking-widest mt-2 md:mt-4">
+            Open Daily 09:00 - 18:00
+          </p>
+        </div>
+
+        <!-- Footer - Map -->
+        <div
+          class="scroll-animate opacity-0 translate-y-12 transition-all duration-1000 delay-200 ease-out flex flex-col items-center md:items-start w-full">
+          <h3 class="text-2xl font-serif text-[#2c2c2c] mb-4">Find Us</h3>
+          <div class="w-full h-40 md:h-38 bg-[#dadada] rounded-2xl shadow-inner overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3820.9057756588163!2d102.62541027515023!3d16.731552584048092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3122511630eb629d%3A0xa7a17ff83f05b08d!2z4Lia4LmJ4Liy4LiZ4Lib4Liy4Lii4LmE4Lih4LmJ!5e0!3m2!1sth!2sth!4v1772853443776!5m2!1sth!2sth"
+              width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+
+      </div>
+      <hr class="border-[#2c2c2c]/20 mb-6 w-1/2 md:w-full mx-auto md:mx-0">
+      <div class="text-center">
+        <p class="text-[10px] text-[#2c2c2c]/40 uppercase tracking-widest">
+          © 2026 Baan Pai Mai Cafe. Crafting moments.
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- ===== END FOOTER / CONTACT ===== -->
+
+
+  <div id="searchModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 relative transform transition-all">
+      <button id="close-search-modal" class="absolute top-4 right-4 text-stone-400 hover:text-stone-600 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <h3 class="font-serif text-2xl text-stone-800 mb-2 text-center">Track Your Ride</h3>
+      <p class="text-stone-500 text-sm mb-6 text-center">ตรวจสอบสถานะคิวรถของคุณ</p>
+
+      <div class="mb-6">
+        <label class="block text-xs font-bold text-stone-500 mb-2 uppercase tracking-wide">Tracking Code</label>
+        <input type="text" id="search-input" placeholder="e.g. BPM-8892"
+          class="w-full border border-stone-300 rounded-lg p-3 text-stone-700 font-mono focus:outline-none focus:border-[#8ba37a] focus:ring-1 focus:ring-[#8ba37a] placeholder:text-stone-300">
+      </div>
+
+      <button id="btn-search-booking"
+        class="w-full bg-[#8ba37a] text-white font-bold py-3 rounded-full hover:bg-[#728763] transition uppercase text-sm tracking-wider flex justify-center items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        Search Booking
+      </button>
+    </div>
+  </div>
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+  <script src="booking.js"></script>
+</body>
+
+</html>

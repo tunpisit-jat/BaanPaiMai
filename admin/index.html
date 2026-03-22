@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Baan Pai Mai</title>
+    <link href="../dist/output.css" rel="stylesheet">
+
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ซ่อนไอคอนปฏิทินดั้งเดิมของเบราว์เซอร์ */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none;
+            -webkit-appearance: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-[#f0f2f0] font-sans text-[#2c2c2c] h-screen flex flex-col md:flex-row overflow-hidden transition-colors duration-300 selection:bg-[#8ba37a] selection:text-white">
+
+    <!-- ==========================================
+         SIDEBAR
+         - Logo + Admin Panel label (desktop)
+         - Nav: #nav-overview, #nav-settings (admin.js ใช้ toggle tab)
+         - Logout mobile: #btn-logout-mobile
+         - Staff email: #admin-user-email (admin.js เติมชื่อหลัง login)
+         - Logout button: #btn-logout (admin.js ผูก event)
+    =========================================== -->
+    <aside
+        class="fixed bottom-0 left-0 w-full bg-white border-t border-stone-200 z-50 md:relative md:w-64 md:border-r md:border-t-0 md:flex md:flex-col shadow-[0_-5px_20px_rgba(0,0,0,0.05)] md:shadow-none transition-colors duration-300">
+
+        <div class="hidden md:block p-6 border-b border-stone-100">
+            <h1 class="font-serif text-2xl tracking-widest text-[#2c2c2c]">BAAN PAI MAI</h1>
+            <p class="text-[10px] text-[#8ba37a] font-bold tracking-[0.2em] uppercase mt-1">Admin Panel</p>
+        </div>
+
+        <nav class="flex flex-row md:flex-col p-2 md:p-4 gap-1 md:gap-2">
+            <button id="nav-overview"
+                class="flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-[10px] md:text-sm font-bold bg-[#8ba37a]/10 text-[#8ba37a] transition-all">
+                <svg class="w-5 h-5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                    </path>
+                </svg>
+                Overview
+            </button>
+
+            <button id="nav-settings"
+                class="flex-1 md:w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 rounded-xl text-[10px] md:text-sm font-bold text-stone-500 hover:bg-stone-50 transition-all">
+                <svg class="w-5 h-5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Settings
+            </button>
+
+            <button id="btn-logout-mobile" onclick="document.getElementById('btn-logout').click()"
+                class="flex-1 md:hidden flex flex-col items-center justify-center gap-1 p-2 rounded-xl text-[10px] font-bold text-red-500 hover:bg-red-50 transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                    </path>
+                </svg>
+                Logout
+            </button>
+        </nav>
+
+        <div class="hidden md:block mt-auto p-4 border-t border-stone-100">
+            <div class="bg-stone-50 p-4 rounded-2xl border border-stone-200 text-center transition-colors">
+                <span id="admin-user-email"
+                    class="block text-xs text-stone-500 font-bold truncate mb-3">Loading...</span>
+                <button id="btn-logout"
+                    class="w-full text-[10px] font-bold tracking-widest bg-white border border-stone-300 px-4 py-2 rounded-lg text-stone-600 hover:border-red-500 hover:text-red-500 transition-all shadow-sm">
+                    LOGOUT
+                </button>
+            </div>
+        </div>
+    </aside>
+    <!-- ===== END SIDEBAR ===== -->
+
+
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto relative pb-20 md:pb-0">
+
+        <!-- ==========================================
+             HEADER BAR (Sticky)
+             - Title + subtitle
+             - Badge โควตา: #header-quota-display (admin.js เติมค่า)
+             - Badge จองล่วงหน้า: #header-advance-display (admin.js เติมค่า)
+             - Date picker: #filter-date (admin.js ผูก event onChange)
+        =========================================== -->
+        <header
+            class="bg-white/80 backdrop-blur-md sticky top-0 z-30 px-4 md:px-8 py-4 md:py-6 border-b border-stone-200 transition-colors duration-300">
+            <div class="flex flex-col xl:flex-row justify-between xl:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-serif text-[#2c2c2c] transition-colors">Classic Car Bookings</h2>
+                    <p class="text-xs text-stone-500 mt-1 transition-colors">จัดการคิวจองรถและระบบหน้าร้าน</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                    <div
+                        class="flex items-center gap-2 bg-white h-[46px] px-4 rounded-xl border border-stone-200 shadow-sm transition-colors">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+                        <span class="text-xs text-stone-500 font-bold tracking-wide">โควตา: <span
+                                id="header-quota-display" class="text-[#2c2c2c]">...</span> คัน/รอบ</span>
+                    </div>
+
+                    <div
+                        class="flex items-center gap-2 bg-white h-[46px] px-4 rounded-xl border border-stone-200 shadow-sm transition-colors">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+                        <span class="text-xs text-stone-500 font-bold tracking-wide">จองล่วงหน้า: <span
+                                id="header-advance-display" class="text-[#2c2c2c]">...</span> วัน</span>
+                    </div>
+
+                    <div onclick="document.getElementById('filter-date').showPicker()"
+                        class="flex items-center bg-white h-[46px] p-1.5 rounded-xl border border-stone-200 shadow-sm transition-colors cursor-pointer hover:border-[#8ba37a]">
+                        <div
+                            class="p-1.5 text-stone-500 bg-stone-100 rounded-lg h-full flex items-center justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="flex flex-col px-3 justify-center h-full pointer-events-none">
+                            <span
+                                class="text-[8px] font-bold text-stone-400 uppercase tracking-widest leading-none mb-0.5">Select
+                                Date</span>
+                            <input type="date" id="filter-date"
+                                class="bg-transparent border-none outline-none text-[#2c2c2c] font-bold cursor-pointer p-0 text-xs focus:ring-0 leading-none pointer-events-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== END HEADER BAR ===== -->
+
+
+        <div class="p-4 md:p-8">
+
+            <!-- ==========================================
+                 TAB: OVERVIEW (#tab-overview)
+                 - Summary Cards: #count-total, #count-pending, #count-confirmed
+                 - Booking Grid: #booking-list-container (admin.js generate การ์ดทุก slot)
+            =========================================== -->
+            <div id="tab-overview" class="block animate-fade-in">
+
+                <!-- SUMMARY CARDS -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div
+                        class="bg-white p-5 rounded-2xl border-l-4 border-l-stone-800 border border-stone-200 flex items-center justify-between shadow-sm transition-colors">
+                        <div>
+                            <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">Total
+                                Bookings</p>
+                            <h3 id="count-total" class="text-4xl font-serif text-[#2c2c2c]">0</h3>
+                        </div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-stone-100 flex items-center justify-center text-stone-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-5 rounded-2xl border-l-4 border-l-yellow-400 border border-stone-200 flex items-center justify-between shadow-sm transition-colors">
+                        <div>
+                            <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">Pending <span
+                                    class="text-stone-300 font-normal">(รอยืนยัน)</span></p>
+                            <h3 id="count-pending" class="text-4xl font-serif text-yellow-500">0</h3>
+                        </div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-5 rounded-2xl border-l-4 border-l-[#8ba37a] border border-stone-200 flex items-center justify-between shadow-sm transition-colors">
+                        <div>
+                            <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1">Confirmed
+                                <span class="text-stone-300 font-normal">(ยืนยันแล้ว)</span></p>
+                            <h3 id="count-confirmed" class="text-4xl font-serif text-[#8ba37a]">0</h3>
+                        </div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-[#8ba37a]/10 flex items-center justify-center text-[#8ba37a]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <!-- ===== END SUMMARY CARDS ===== -->
+
+                <!-- BOOKING QUEUE GRID -->
+                <div>
+                    <h3 class="text-lg font-bold text-[#2c2c2c] mb-4 transition-colors">Daily Schedule</h3>
+                    <div id="booking-list-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 pb-4">
+                        <!-- admin.js generate การ์ดแต่ละ slot ใส่ที่นี่ -->
+                        <div
+                            class="col-span-full py-20 text-center text-stone-500 bg-white rounded-2xl border border-stone-200 flex flex-col items-center justify-center transition-colors">
+                            <svg class="animate-spin h-8 w-8 text-[#8ba37a] mb-4" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            <p class="text-sm tracking-wide">กำลังเชื่อมต่อฐานข้อมูล...</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- ===== END BOOKING QUEUE GRID ===== -->
+
+            </div>
+            <!-- ===== END TAB: OVERVIEW ===== -->
+
+
+            <!-- ==========================================
+                 TAB: SETTINGS (#tab-settings)
+                 - Emergency Close: #emergency-toggle, #toggle-bg, #toggle-dot, #emergency-text
+                 - Advance Booking: #advance-days-input, #btn-update-advance-days
+                 - Jeep Quota: #jeep-quota-select, #btn-update-quota
+                 - Slot Management: #slot-controls (admin.js generate ปุ่มเวลา)
+            =========================================== -->
+            <div id="tab-settings" class="hidden animate-fade-in">
+                <div class="max-w-4xl">
+                    <h3 class="text-lg font-bold text-[#2c2c2c] mb-6 transition-colors">System Configurations</h3>
+
+                    <div class="space-y-4 md:space-y-6">
+
+                        <!-- EMERGENCY CLOSE -->
+                        <div
+                            class="bg-white p-6 rounded-2xl border border-stone-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 transition-colors shadow-sm">
+                            <div>
+                                <h4 class="text-base font-bold text-[#2c2c2c]">Emergency Close (ปิดรับจองฉุกเฉิน)</h4>
+                                <p class="text-xs text-stone-500 mt-1">ล็อกหน้าเว็บฝั่งลูกค้าทันที ไม่สามารถกดจองรอบใดๆ
+                                    ได้ (ใช้กรณีฝนตกหนัก/รถเสีย)</p>
+                                <p id="emergency-text"
+                                    class="text-xs font-bold text-stone-500 mt-3 bg-stone-100 px-3 py-1.5 rounded-lg inline-block border border-stone-200 transition-colors">
+                                    กำลังตรวจสอบ...</p>
+                            </div>
+                            <label class="flex items-center cursor-pointer shrink-0">
+                                <div class="relative">
+                                    <input type="checkbox" id="emergency-toggle" class="sr-only">
+                                    <div id="toggle-bg"
+                                        class="block w-14 h-8 bg-stone-200 rounded-full transition-colors duration-300">
+                                    </div>
+                                    <div id="toggle-dot"
+                                        class="absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 shadow-sm">
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <!-- ===== END EMERGENCY CLOSE ===== -->
+
+                        <!-- ADVANCE BOOKING + JEEP QUOTA -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+
+                            <div class="bg-white p-6 rounded-2xl border border-stone-200 transition-colors shadow-sm">
+                                <h4 class="text-base font-bold text-[#2c2c2c]">Advance Booking</h4>
+                                <p class="text-xs text-stone-500 mt-1 mb-4 h-8">
+                                    จำนวนวันที่อนุญาตให้ลูกค้ากดเลือกจองล่วงหน้าได้ในปฏิทิน</p>
+                                <div class="flex items-center gap-2">
+                                    <input type="number" id="advance-days-input" min="1" max="60"
+                                        class="flex-1 bg-white border border-stone-300 text-[#2c2c2c] text-sm rounded-lg focus:ring-[#8ba37a] focus:border-[#8ba37a] block p-2.5 outline-none transition-colors">
+                                    <button id="btn-update-advance-days"
+                                        class="bg-[#8ba37a] text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-[#6a805b] transition-colors whitespace-nowrap shadow-sm">
+                                        บันทึก
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-2xl border border-stone-200 transition-colors shadow-sm">
+                                <h4 class="text-base font-bold text-[#2c2c2c]">Jeep Quota Limit</h4>
+                                <p class="text-xs text-stone-500 mt-1 mb-4 h-8">กำหนดจำนวนรถรับลูกค้าสูงสุดต่อ 1 รอบเวลา
+                                </p>
+                                <div class="flex items-center gap-2">
+                                    <select id="jeep-quota-select"
+                                        class="flex-1 bg-white border border-stone-300 text-[#2c2c2c] text-sm rounded-lg focus:ring-[#8ba37a] focus:border-[#8ba37a] block p-2.5 outline-none cursor-pointer transition-colors">
+                                        <option value="3">3 คัน (ปกติ)</option>
+                                        <option value="2">2 คัน</option>
+                                        <option value="1">1 คัน</option>
+                                        <option value="0">0 คัน (ปิดรับ)</option>
+                                    </select>
+                                    <button id="btn-update-quota"
+                                        class="bg-[#8ba37a] text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-[#6a805b] transition-colors whitespace-nowrap shadow-sm">
+                                        อัปเดต
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ===== END ADVANCE BOOKING + JEEP QUOTA ===== -->
+
+                        <!-- SLOT MANAGEMENT -->
+                        <div class="bg-white p-6 rounded-2xl border border-stone-200 transition-colors shadow-sm">
+                            <h4 class="text-base font-bold text-[#2c2c2c]">Slot Management</h4>
+                            <p class="text-xs text-stone-500 mt-1 mb-5">คลิกที่ปุ่มเวลาด้านล่างเพื่อทำการ <span
+                                    class="text-red-500 font-bold">ล็อก (สีแดง)</span> หรือ ปลดล็อก รอบเวลานั้นๆ</p>
+                            <div id="slot-controls" class="flex flex-wrap gap-2">
+                                <!-- admin.js generate ปุ่มเวลาแต่ละรอบใส่ที่นี่ -->
+                                <span class="text-sm text-stone-400">Loading slots...</span>
+                            </div>
+                        </div>
+                        <!-- ===== END SLOT MANAGEMENT ===== -->
+
+                    </div>
+                </div>
+            </div>
+            <!-- ===== END TAB: SETTINGS ===== -->
+
+        </div>
+    </main>
+    <!-- ===== END MAIN ===== -->
+
+
+    <!-- ==========================================
+         LOGIN OVERLAY (#login-overlay)
+         ซ่อนอยู่จนกว่า Firebase Auth จะยืนยันว่ายัง logout
+         - #admin-email, #admin-password: input
+         - #btn-login: admin.js ผูก event signIn
+         - #login-error: แสดงข้อผิดพลาด
+    =========================================== -->
+    <div id="login-overlay"
+        class="fixed inset-0 bg-[#f0f2f0]/95 backdrop-blur-md z-[999] flex items-center justify-center p-4 transition-colors duration-300">
+        <div
+            class="bg-white p-8 md:p-10 rounded-3xl border border-stone-200 w-full max-w-sm relative overflow-hidden shadow-2xl transition-colors duration-300">
+            <div class="absolute top-0 left-0 w-full h-2 bg-[#8ba37a] transition-colors"></div>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-serif text-[#2c2c2c] transition-colors">Admin Panel</h2>
+                <p class="text-[10px] text-[#8ba37a] mt-2 tracking-[0.2em] uppercase font-bold transition-colors">Baan
+                    Pai Mai Auth</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <input type="email" id="admin-email" placeholder="Email address" autocomplete="off"
+                        class="w-full bg-stone-50 border border-stone-200 text-[#2c2c2c] rounded-xl p-3.5 text-sm focus:outline-none focus:border-[#8ba37a] transition-colors">
+                </div>
+                <div>
+                    <input type="password" id="admin-password" placeholder="Password" autocomplete="new-password"
+                        class="w-full bg-stone-50 border border-stone-200 text-[#2c2c2c] rounded-xl p-3.5 text-sm focus:outline-none focus:border-[#8ba37a] transition-colors">
+                </div>
+                <p id="login-error"
+                    class="text-red-500 text-xs text-center hidden bg-red-50 p-3 rounded-xl border border-red-200 transition-colors">
+                    ❌ อีเมลหรือรหัสผ่านไม่ถูกต้อง!
+                </p>
+                <button id="btn-login"
+                    class="w-full bg-[#cba472] text-white p-3.5 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-[#b59265] transition-colors mt-2 shadow-sm">
+                    Sign In
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- ===== END LOGIN OVERLAY ===== -->
+
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <script src="../firebase-config.js"></script>
+    <script src="admin.js"></script>
+
+    <script>
+        // ==========================================
+        // ระบบสลับ Tab (Overview / Settings)
+        // ==========================================
+        const navOverview = document.getElementById('nav-overview');
+        const navSettings = document.getElementById('nav-settings');
+        const tabOverview = document.getElementById('tab-overview');
+        const tabSettings = document.getElementById('tab-settings');
+
+        if (navOverview && navSettings && tabOverview && tabSettings) {
+            function setActiveTab(activeBtn, inactiveBtn) {
+                // สีสถานะ "เลือก"
+                activeBtn.classList.add('bg-[#8ba37a]/10', 'text-[#8ba37a]');
+                activeBtn.classList.remove('text-stone-500', 'hover:bg-stone-50');
+
+                // สีสถานะ "ไม่ได้เลือก"
+                inactiveBtn.classList.remove('bg-[#8ba37a]/10', 'text-[#8ba37a]');
+                inactiveBtn.classList.add('text-stone-500', 'hover:bg-stone-50');
+            }
+
+            navOverview.addEventListener('click', () => {
+                tabOverview.classList.remove('hidden');
+                tabSettings.classList.add('hidden');
+                setActiveTab(navOverview, navSettings);
+            });
+
+            navSettings.addEventListener('click', () => {
+                tabSettings.classList.remove('hidden');
+                tabOverview.classList.add('hidden');
+                setActiveTab(navSettings, navOverview);
+            });
+        }
+    </script>
+    <!-- ===== END SCRIPTS ===== -->
+
+</body>
+
+</html>
