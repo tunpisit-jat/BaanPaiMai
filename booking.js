@@ -282,8 +282,8 @@ document.addEventListener("DOMContentLoaded", () => {
       btnConfirm.disabled = true;
 
       try {
-        // 1. เช็กเบื้องต้นก่อน (Fast Fail) ถ้าระบบรู้ว่าเต็มแล้ว จะได้เด้งออกเลย
-        const snapshot = await db
+        // 🛡️ ด่านที่ 1: เช็กก่อนเลยว่าคิวเต็มไหม (Fast Fail)
+        let snapshot = await db
           .collection("bookings")
           .where("date", "==", selectedDate)
           .where("timeSlot", "==", selectedTime)
@@ -300,66 +300,48 @@ document.addEventListener("DOMContentLoaded", () => {
           return resetButton(btnConfirm, originalText);
         }
 
-        // 2. ถ้ายังไม่เต็ม ให้แอบสร้างข้อมูลการจองลงไปก่อน (เพิ่ม clientTime สำหรับตัดสินตอนแย่งคิว)
-        const timestamp = Date.now().toString(36).toUpperCase().slice(-4);
-        const random = Math.floor(1000 + Math.random() * 9000);
-        const trackingCode = `BPM-${timestamp}${random}`;
-        const clientTime = Date.now(); // เวลาที่กดจองเป๊ะๆ (มิลลิวินาที)
+        // 🛡️ ด่านที่ 2: สุ่มหน่วงเวลา (Random Jitter) ระหว่าง 200ms - 1000ms
+        // เพื่อสลายการชนกัน ถ้ากดพร้อมกันเป๊ะๆ จะมีเครื่องนึงได้เช็กด่าน 3 ก่อนเสมอ
+        const randomDelay = Math.floor(Math.random() * 800) + 200;
+        await new Promise((resolve) => setTimeout(resolve, randomDelay));
 
-        const docRef = await db.collection("bookings").add({
-          bookingCode: trackingCode,
-          name,
-          phone,
-          date: selectedDate,
-          timeSlot: selectedTime,
-          status: "PENDING",
-          clientTime: clientTime, // <- เก็บเวลาไปดวลกัน
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // 3. หน่วงเวลาเล็กน้อย (500ms) เพื่อรอให้ข้อมูลของคนที่อาจจะกดพร้อมกัน วิ่งมาถึง Database ให้ครบ
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        // 4. ดึงข้อมูลอีกครั้ง เพื่อตรวจสอบว่าคิวทะลุโควตาหรือไม่
-        const verifySnap = await db
+        // 🛡️ ด่านที่ 3: เช็กซ้ำอีกรอบ (Double Check)
+        // ถ้าเครื่องอื่นที่สุ่มได้เวลาน้อยกว่า แอบบันทึกไปแล้วตอนที่เรารอ เราจะรู้ทันที!
+        snapshot = await db
           .collection("bookings")
           .where("date", "==", selectedDate)
           .where("timeSlot", "==", selectedTime)
           .where("status", "in", ["PENDING", "CONFIRMED"])
           .get();
 
-        if (verifySnap.size > currentMaxJeeps) {
-          // ถ้าคิวทะลุโควตา (มีคนกดพร้อมกัน) ให้เอามาเรียงลำดับใครกดก่อนหลัง
-          let bookingsList = [];
-          verifySnap.forEach((doc) => {
-            bookingsList.push({ id: doc.id, time: doc.data().clientTime || 0 });
-          });
-
-          // เรียงจากเวลาน้อยไปมาก (ใครกดก่อนอยู่บน) ถ้าเวลาเท่ากันเป๊ะ ให้ตัดสินด้วย ID
-          bookingsList.sort((a, b) =>
-            a.time === b.time ? a.id.localeCompare(b.id) : a.time - b.time,
+        if (snapshot.size >= currentMaxJeeps) {
+          alert(
+            "ขออภัยครับ มีลูกค้าท่านอื่นกดจองตัดหน้าไปเมื่อเสี้ยววินาทีที่แล้ว คิวเต็มพอดีครับ!",
           );
-
-          // หาตำแหน่งของเราในคิว
-          const myRank = bookingsList.findIndex((b) => b.id === docRef.id);
-
-          // ถ้าอันดับของเรา เกินโควตาที่รับได้ แปลว่าเราแพ้ (กดช้ากว่าเสี้ยววินาที)
-          if (myRank >= currentMaxJeeps) {
-            await docRef.delete(); // ลบข้อมูลของเราทิ้งทันที
-            alert(
-              "ขออภัยครับ มีลูกค้าท่านอื่นกดจองตัดหน้าไปเมื่อเสี้ยววินาทีที่แล้ว คิวเต็มพอดีครับ!",
-            );
-
-            timeSlots.forEach((s) => {
-              s.classList.remove("bg-[#8ba37a]", "text-white");
-              s.classList.add("bg-white", "text-stone-700");
-            });
-            selectedTime = "";
-            return resetButton(btnConfirm, originalText);
-          }
+          timeSlots.forEach((s) => {
+            s.classList.remove("bg-[#8ba37a]", "text-white");
+            s.classList.add("bg-white", "text-stone-700");
+          });
+          selectedTime = "";
+          return resetButton(btnConfirm, originalText);
         }
 
-        // 5. ถ้าผ่านด่านมาได้ แปลว่าจองสำเร็จชัวร์ 100% ไม่มีคิวซ้อน!
+        // 🛡️ ด่านที่ 4: ปลอดภัยแล้ว! บันทึกข้อมูลลงฐานข้อมูล (ไม่มีข้อมูลขยะค้างแน่นอน)
+        const timestamp = Date.now().toString(36).toUpperCase().slice(-4);
+        const random = Math.floor(1000 + Math.random() * 9000);
+        const trackingCode = `BPM-${timestamp}${random}`;
+
+        await db.collection("bookings").add({
+          bookingCode: trackingCode,
+          name,
+          phone,
+          date: selectedDate,
+          timeSlot: selectedTime,
+          status: "PENDING",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        // ส่งแจ้งเตือน LINE
         sendLineNotify({
           code: trackingCode,
           name,
