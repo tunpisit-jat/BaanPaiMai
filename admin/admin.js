@@ -301,7 +301,7 @@ function startAdminSystem() {
   }
 
   // ==========================================
-  // ระบบ BOOKING LIST (เวอร์ชันการ์ด)
+  // ระบบ BOOKING LIST 
   // ==========================================
   function loadBookings() {
     db.collection("bookings")

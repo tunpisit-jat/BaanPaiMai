@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================
-// ✅ ฟังก์ชันแจ้งเตือน LINE (เพิ่มใหม่)
+//  ฟังก์ชันแจ้งเตือน LINE
 // ==========================================
 async function sendLineNotify(bookingData) {
   const scriptURL =

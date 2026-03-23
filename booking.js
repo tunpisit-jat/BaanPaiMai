@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 1; i <= daysInMonth; i++) {
       const d = new Date(year, month, i);
       const dStr = getFormattedDate(d);
-      // ✅ เช็กว่าวันนี้คือวันที่ user เลือกไว้อยู่ไหม
+      // เช็กว่าวันนี้คือวันที่ user เลือกไว้อยู่ไหม
       const isSelected = selectedDate === dStr;
 
       if (dStr === todayStr) {
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ผูก event listener ให้ปุ่มวันในปฏิทิน
     document.querySelectorAll(".calendar-day").forEach((dayBtn) => {
       dayBtn.addEventListener("click", function () {
-        // ✅ ไม่ต้อง toggle class ด้วย JS แล้ว เพราะ renderCalendar() จะ highlight ให้เองจาก selectedDate
+        //  ไม่ต้อง toggle class ด้วย JS แล้ว เพราะ renderCalendar() จะ highlight ให้เองจาก selectedDate
         selectedDate = this.getAttribute("data-date");
         selectedTime = "";
         // re-render ปฏิทินให้ highlight วันใหม่ทันที
