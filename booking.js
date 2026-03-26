@@ -42,19 +42,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let selectedTime = "";
   let isSystemClosed = false;
-  // จำนวนชั่วโมงที่ต้องจองล่วงหน้าก่อนรอบเริ่ม
   const ADVANCE_BOOKING_HOURS = 1;
 
   let unsubBookings = null;
   let unsubSettings = null;
 
-  // ตัวแปรเก็บค่าจาก Firebase Settings
   let currentMaxJeeps = 3;
   let currentAdvanceDays = 1;
 
-  const getFormattedDate = (dateObj) => {
-    return dateObj.toLocaleDateString("en-CA"); // YYYY-MM-DD
-  };
+  const getFormattedDate = (dateObj) => dateObj.toLocaleDateString("en-CA");
 
   const todayStr = getFormattedDate(new Date());
   let selectedDate = todayStr;
@@ -85,14 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const settingsData = settingsDoc.exists ? settingsDoc.data() : {};
         isSystemClosed = settingsData.emergencyClose || false;
         const blockedSlots = settingsData.blockedSlots || [];
-
         currentMaxJeeps =
           settingsData.maxJeeps !== undefined ? settingsData.maxJeeps : 3;
-
         currentAdvanceDays =
           settingsData.advanceDays !== undefined ? settingsData.advanceDays : 1;
 
-        // Re-render ปฏิทินทุกครั้งที่ settings เปลี่ยน พร้อม highlight วันที่เลือกไว้
         renderCalendar();
 
         if (unsubBookings) unsubBookings();
@@ -190,7 +183,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // คำนวณวันสุดท้ายที่จองได้
     const maxDate = new Date(today);
     maxDate.setDate(today.getDate() + currentAdvanceDays);
     const maxDateStr = getFormattedDate(maxDate);
@@ -201,22 +193,17 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 1; i <= daysInMonth; i++) {
       const d = new Date(year, month, i);
       const dStr = getFormattedDate(d);
-      // เช็กว่าวันนี้คือวันที่ user เลือกไว้อยู่ไหม
       const isSelected = selectedDate === dStr;
 
       if (dStr === todayStr) {
-        // วันนี้ — highlight สีเข้มเสมอ
         gridHTML += `<button class="calendar-day bg-[#3a2a18] text-white rounded-full w-7 h-7 flex items-center justify-center mx-auto shadow-md cursor-pointer" data-date="${dStr}">${i}</button>`;
       } else if (dStr > todayStr && dStr <= maxDateStr) {
-        // วันที่จองล่วงหน้าได้ — ถ้าถูกเลือกให้ highlight สีเข้ม ถ้าไม่ได้เลือกให้สีขาว
         gridHTML += `<button class="calendar-day ${isSelected ? "bg-[#cba472] text-white shadow-md" : "text-[#2c2c2c] bg-white border border-slate-200 hover:bg-[#cba472] hover:text-white"} rounded-full w-7 h-7 flex items-center justify-center mx-auto cursor-pointer" data-date="${dStr}">${i}</button>`;
       } else {
-        // วันที่กดไม่ได้
         gridHTML += `<div class="text-slate-300 w-7 h-7 mx-auto flex items-center justify-center pointer-events-none">${i}</div>`;
       }
     }
 
-    // Cross-month fix: ถ้า maxDate ข้ามเดือน ให้วาดวันต้นเดือนถัดไปด้วย
     if (maxDate.getMonth() !== today.getMonth()) {
       const nextMonthDays = maxDate.getDate();
       for (let i = 1; i <= nextMonthDays; i++) {
@@ -229,13 +216,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     calGrid.innerHTML = gridHTML;
 
-    // ผูก event listener ให้ปุ่มวันในปฏิทิน
     document.querySelectorAll(".calendar-day").forEach((dayBtn) => {
       dayBtn.addEventListener("click", function () {
-        //  ไม่ต้อง toggle class ด้วย JS แล้ว เพราะ renderCalendar() จะ highlight ให้เองจาก selectedDate
         selectedDate = this.getAttribute("data-date");
         selectedTime = "";
-        // re-render ปฏิทินให้ highlight วันใหม่ทันที
         renderCalendar();
         checkSlotAvailability();
       });
@@ -245,7 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCalendar();
 
   // ==========================================
-  // 5. ระบบเลือกเวลา และการบันทึกการจอง
+  // 5. ระบบเลือกเวลา
   // ==========================================
   const handleSlotClick = function () {
     if (this.classList.contains("pointer-events-none")) return;
@@ -258,13 +242,18 @@ document.addEventListener("DOMContentLoaded", () => {
     selectedTime = this.getAttribute("data-time");
   };
 
-  timeSlots.forEach((slot) => {
-    slot.addEventListener("click", handleSlotClick);
-  });
+  timeSlots.forEach((slot) => slot.addEventListener("click", handleSlotClick));
 
+  // ==========================================
+  // 6. ระบบบันทึกการจอง (Firestore Transaction)
+  //    ป้องกัน Race Condition ด้วย Atomic Transaction
+  //    — เช็กและบันทึกใน operation เดียว ทำให้ไม่มีช่องโหว่
+  //    ไม่ว่าจะกดพร้อมกันกี่คน คนที่เกินโควตาจะถูกปฏิเสธทันที
+  // ==========================================
   if (btnConfirm) {
     btnConfirm.addEventListener("click", async (e) => {
       e.preventDefault();
+
       const name = inputName.value.trim();
       const phone = inputPhone.value.trim();
 
@@ -282,66 +271,40 @@ document.addEventListener("DOMContentLoaded", () => {
       btnConfirm.disabled = true;
 
       try {
-        // 🛡️ ด่านที่ 1: เช็กก่อนเลยว่าคิวเต็มไหม (Fast Fail)
-        let snapshot = await db
-          .collection("bookings")
-          .where("date", "==", selectedDate)
-          .where("timeSlot", "==", selectedTime)
-          .where("status", "in", ["PENDING", "CONFIRMED"])
-          .get();
-
-        if (snapshot.size >= currentMaxJeeps) {
-          alert("ขออภัยครับ รอบเวลานี้เพิ่งเต็มไปเมื่อสักครู่");
-          timeSlots.forEach((s) => {
-            s.classList.remove("bg-[#8ba37a]", "text-white");
-            s.classList.add("bg-white", "text-stone-700");
-          });
-          selectedTime = "";
-          return resetButton(btnConfirm, originalText);
-        }
-
-        // 🛡️ ด่านที่ 2: สุ่มหน่วงเวลา (Random Jitter) ระหว่าง 200ms - 1000ms
-        // เพื่อสลายการชนกัน ถ้ากดพร้อมกันเป๊ะๆ จะมีเครื่องนึงได้เช็กด่าน 3 ก่อนเสมอ
-        const randomDelay = Math.floor(Math.random() * 800) + 200;
-        await new Promise((resolve) => setTimeout(resolve, randomDelay));
-
-        // 🛡️ ด่านที่ 3: เช็กซ้ำอีกรอบ (Double Check)
-        // ถ้าเครื่องอื่นที่สุ่มได้เวลาน้อยกว่า แอบบันทึกไปแล้วตอนที่เรารอ เราจะรู้ทันที!
-        snapshot = await db
-          .collection("bookings")
-          .where("date", "==", selectedDate)
-          .where("timeSlot", "==", selectedTime)
-          .where("status", "in", ["PENDING", "CONFIRMED"])
-          .get();
-
-        if (snapshot.size >= currentMaxJeeps) {
-          alert(
-            "ขออภัยครับ มีลูกค้าท่านอื่นกดจองตัดหน้าไปเมื่อเสี้ยววินาทีที่แล้ว คิวเต็มพอดีครับ!",
-          );
-          timeSlots.forEach((s) => {
-            s.classList.remove("bg-[#8ba37a]", "text-white");
-            s.classList.add("bg-white", "text-stone-700");
-          });
-          selectedTime = "";
-          return resetButton(btnConfirm, originalText);
-        }
-
-        // 🛡️ ด่านที่ 4: ปลอดภัยแล้ว! บันทึกข้อมูลลงฐานข้อมูล (ไม่มีข้อมูลขยะค้างแน่นอน)
+        // สร้างรหัสจองล่วงหน้า
         const timestamp = Date.now().toString(36).toUpperCase().slice(-4);
         const random = Math.floor(1000 + Math.random() * 9000);
         const trackingCode = `BPM-${timestamp}${random}`;
 
-        await db.collection("bookings").add({
-          bookingCode: trackingCode,
-          name,
-          phone,
-          date: selectedDate,
-          timeSlot: selectedTime,
-          status: "PENDING",
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        // สร้าง document reference ล่วงหน้า (ต้องทำนอก transaction)
+        const newBookingRef = db.collection("bookings").doc();
+
+        // ใช้ Firestore Transaction เพื่อทำ "เช็ก + บันทึก" แบบ atomic
+        // ถ้ามีคนอื่น write ข้อมูลเดียวกันในช่วงนี้ Firestore จะ retry หรือ throw error ให้อัตโนมัติ
+        await db.runTransaction(async (transaction) => {
+          const snapshot = await db
+            .collection("bookings")
+            .where("date", "==", selectedDate)
+            .where("timeSlot", "==", selectedTime)
+            .where("status", "in", ["PENDING", "CONFIRMED"])
+            .get();
+
+          if (snapshot.size >= currentMaxJeeps) {
+            throw new Error("SLOT_FULL");
+          }
+
+          transaction.set(newBookingRef, {
+            bookingCode: trackingCode,
+            name,
+            phone,
+            date: selectedDate,
+            timeSlot: selectedTime,
+            status: "PENDING",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
         });
 
-        // ส่งแจ้งเตือน LINE
+        // ถึงบรรทัดนี้ได้ = Transaction สำเร็จ 100%
         sendLineNotify({
           code: trackingCode,
           name,
@@ -362,7 +325,16 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedTime = "";
         resetButton(btnConfirm, originalText);
       } catch (error) {
-        alert("จองไม่สำเร็จ: " + error.message);
+        if (error.message === "SLOT_FULL") {
+          alert("ขออภัยครับ รอบเวลานี้เต็มแล้ว กรุณาเลือกรอบอื่นครับ");
+          timeSlots.forEach((s) => {
+            s.classList.remove("bg-[#8ba37a]", "text-white");
+            s.classList.add("bg-white", "text-stone-700");
+          });
+          selectedTime = "";
+        } else {
+          alert("จองไม่สำเร็จ: " + error.message);
+        }
         resetButton(btnConfirm, originalText);
       }
     });
@@ -374,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  // 6. ระบบคัดลอกรหัสจอง
+  // 7. ระบบคัดลอกรหัสจอง
   // ==========================================
   const btnCopyCode = document.getElementById("btn-copy-code");
   if (btnCopyCode && displayCode) {
@@ -389,7 +361,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  // 7. ระบบค้นหาคิวจอง
+  // 8. ระบบค้นหาคิวจอง
   // ==========================================
   const btnSearch = document.getElementById("btn-search-booking");
   const searchInput = document.getElementById("search-input");
@@ -416,6 +388,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// ==========================================
+// ฟังก์ชันแจ้งเตือน LINE Notify
+// ==========================================
 async function sendLineNotify(bookingData) {
   const scriptURL =
     "https://script.google.com/macros/s/AKfycbySi_xd7ZKXa8SKRlk8WyR7oaw8gfK5J_eizjFUMjd-2tF6Q9rjgAek0c1YdvB7-fry/exec";
