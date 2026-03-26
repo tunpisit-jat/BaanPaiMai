@@ -246,13 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ==========================================
   // 6. ระบบบันทึกการจอง (Counter Document Transaction)
-  //
-  //    หลักการ: ใช้ document กลาง "slots/{date}_{time}"
-  //    เก็บ count ของแต่ละ slot
-  //    Firestore Transaction จะ lock document นี้
-  //    ทำให้ "เช็ก + เพิ่ม counter + บันทึกการจอง"
-  //    เป็น atomic operation เดียว
-  //    ไม่ว่าจะกดพร้อมกันกี่คน คนที่เกินโควตาจะถูกปฏิเสธ 100%
   // ==========================================
   if (btnConfirm) {
     btnConfirm.addEventListener("click", async (e) => {
