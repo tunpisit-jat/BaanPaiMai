@@ -245,10 +245,14 @@ document.addEventListener("DOMContentLoaded", () => {
   timeSlots.forEach((slot) => slot.addEventListener("click", handleSlotClick));
 
   // ==========================================
-  // 6. ระบบบันทึกการจอง (Firestore Transaction)
-  //    ป้องกัน Race Condition ด้วย Atomic Transaction
-  //    — เช็กและบันทึกใน operation เดียว ทำให้ไม่มีช่องโหว่
-  //    ไม่ว่าจะกดพร้อมกันกี่คน คนที่เกินโควตาจะถูกปฏิเสธทันที
+  // 6. ระบบบันทึกการจอง (Counter Document Transaction)
+  //
+  //    หลักการ: ใช้ document กลาง "slots/{date}_{time}"
+  //    เก็บ count ของแต่ละ slot
+  //    Firestore Transaction จะ lock document นี้
+  //    ทำให้ "เช็ก + เพิ่ม counter + บันทึกการจอง"
+  //    เป็น atomic operation เดียว
+  //    ไม่ว่าจะกดพร้อมกันกี่คน คนที่เกินโควตาจะถูกปฏิเสธ 100%
   // ==========================================
   if (btnConfirm) {
     btnConfirm.addEventListener("click", async (e) => {
@@ -271,28 +275,37 @@ document.addEventListener("DOMContentLoaded", () => {
       btnConfirm.disabled = true;
 
       try {
-        // สร้างรหัสจองล่วงหน้า
         const timestamp = Date.now().toString(36).toUpperCase().slice(-4);
         const random = Math.floor(1000 + Math.random() * 9000);
         const trackingCode = `BPM-${timestamp}${random}`;
 
-        // สร้าง document reference ล่วงหน้า (ต้องทำนอก transaction)
+        // document ref สำหรับ counter ของ slot นี้
+        // key format: "2026-03-26_13:00"
+        const slotRef = db
+          .collection("slots")
+          .doc(`${selectedDate}_${selectedTime}`);
+
+        // document ref สำหรับ booking ใหม่
         const newBookingRef = db.collection("bookings").doc();
 
-        // ใช้ Firestore Transaction เพื่อทำ "เช็ก + บันทึก" แบบ atomic
-        // ถ้ามีคนอื่น write ข้อมูลเดียวกันในช่วงนี้ Firestore จะ retry หรือ throw error ให้อัตโนมัติ
         await db.runTransaction(async (transaction) => {
-          const snapshot = await db
-            .collection("bookings")
-            .where("date", "==", selectedDate)
-            .where("timeSlot", "==", selectedTime)
-            .where("status", "in", ["PENDING", "CONFIRMED"])
-            .get();
+          // อ่าน counter document — Firestore จะ lock document นี้
+          // ทำให้ User A และ B ที่เข้า transaction พร้อมกัน
+          // จะได้ count ที่ถูกต้องเสมอ ไม่มี race condition
+          const slotDoc = await transaction.get(slotRef);
+          const currentCount = slotDoc.exists ? slotDoc.data().count : 0;
 
-          if (snapshot.size >= currentMaxJeeps) {
+          // ถ้าเต็มแล้ว โยน error ออกทันที ไม่บันทึกอะไรทั้งนั้น
+          if (currentCount >= currentMaxJeeps) {
             throw new Error("SLOT_FULL");
           }
 
+          // ยังไม่เต็ม — เพิ่ม counter และบันทึกการจองพร้อมกันใน operation เดียว
+          transaction.set(
+            slotRef,
+            { count: currentCount + 1 },
+            { merge: true },
+          );
           transaction.set(newBookingRef, {
             bookingCode: trackingCode,
             name,
@@ -304,7 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
 
-        // ถึงบรรทัดนี้ได้ = Transaction สำเร็จ 100%
+        // ถึงบรรทัดนี้ได้ = จองสำเร็จ 100%
         sendLineNotify({
           code: trackingCode,
           name,
