@@ -310,7 +310,6 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
 
-        // ถึงบรรทัดนี้ได้ = จองสำเร็จ 100%
         sendLineNotify({
           code: trackingCode,
           name,

@@ -443,7 +443,6 @@ function startAdminSystem() {
 
   // ==========================================
   // จัดการปุ่ม Confirm / Cancel
-  // ยกเลิก: ใช้ Transaction ลด counter slots ด้วย
   // ==========================================
   if (container) {
     container.addEventListener("click", async (e) => {
@@ -461,7 +460,6 @@ function startAdminSystem() {
 
       try {
         if (newStatus === "CANCELLED") {
-          // ดึง date/time จาก dataset ที่ฝังไว้ใน button แล้ว
           const date = btn.dataset.date;
           const time = btn.dataset.time;
           const slotKey = `${date}_${time}`;
@@ -481,7 +479,6 @@ function startAdminSystem() {
             );
           });
         } else {
-          // CONFIRM — ไม่ต้องแตะ counter
           await db
             .collection("bookings")
             .doc(docId)
