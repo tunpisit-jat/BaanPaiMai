@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialData = JSON.parse(bookingDataStr);
   const targetBookingCode = initialData.bookingCode;
 
+  // ==========================================
   // 2. ประกาศตัวแปรเชื่อมกับ HTML
+  // ==========================================
   const showCode = document.getElementById("show-code");
   const showName = document.getElementById("show-name");
   const showPhone = document.getElementById("show-phone");
@@ -40,13 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const bookingData = doc.data();
         const docId = doc.id;
 
-        // แปะข้อมูลทั่วไป
+        // แสดงข้อมูลทั่วไป
         if (showCode) showCode.innerText = bookingData.bookingCode;
         if (showName) showName.innerText = bookingData.name;
         if (showPhone) showPhone.innerText = bookingData.phone;
         if (showTime) showTime.innerText = bookingData.timeSlot;
 
-        // แสดงวันที่นัดหมาย (bookingData.date) แทนวันที่กดจอง
+        // แสดงวันที่นัดหมาย
         if (bookingData.date) {
           const dateObj = new Date(bookingData.date + "T00:00:00");
           const monthNames = [
@@ -63,14 +65,13 @@ document.addEventListener("DOMContentLoaded", () => {
             "Nov",
             "Dec",
           ];
-
           if (showMonth) showMonth.innerText = monthNames[dateObj.getMonth()];
           if (showDay)
             showDay.innerText = String(dateObj.getDate()).padStart(2, "0");
           if (showYear) showYear.innerText = dateObj.getFullYear();
         }
 
-        // จัดการสถานะและสี
+        // แสดงสถานะและสี
         if (showStatus) {
           showStatus.innerText = bookingData.status;
           showStatus.classList.remove(
@@ -81,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
             "text-red-600",
             "bg-red-100",
           );
-
           if (bookingData.status === "PENDING") {
             showStatus.classList.add("text-amber-600", "bg-amber-100");
           } else if (bookingData.status === "CONFIRMED") {
@@ -91,42 +91,57 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
 
-        // 4. จัดการปุ่มยกเลิก
+        // ==========================================
+        // 4. ปุ่มยกเลิก — ลด counter slots ด้วย Transaction
+        // ==========================================
         if (btnCancel) {
           if (bookingData.status === "PENDING") {
             btnCancel.classList.remove("hidden");
 
             btnCancel.onclick = async () => {
-              if (confirm("คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการจองนี้?")) {
-                // ล็อคปุ่มกันลูกค้ากดเบิ้ลระหว่างรอ Firebase ประมวลผล
-                const originalText = btnCancel.innerText;
-                btnCancel.innerText = "กำลังยกเลิก...";
-                btnCancel.disabled = true;
+              if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการจองนี้?")) return;
 
-                try {
-                  await db
-                    .collection("bookings")
-                    .doc(docId)
-                    .update({ status: "CANCELLED" });
+              const originalText = btnCancel.innerText;
+              btnCancel.innerText = "กำลังยกเลิก...";
+              btnCancel.disabled = true;
 
-                  // ✅ แจ้ง LINE เมื่อลูกค้ายกเลิกการจองสำเร็จ
-                  sendLineNotify({
-                    type: "cancel",
-                    code: bookingData.bookingCode,
-                    name: bookingData.name,
-                    phone: bookingData.phone,
-                    date: bookingData.date,
-                    time: bookingData.timeSlot,
-                  });
+              try {
+                const bookingRef = db.collection("bookings").doc(docId);
+                const slotKey = `${bookingData.date}_${bookingData.timeSlot}`;
+                const slotRef = db.collection("slots").doc(slotKey);
 
-                  alert("ยกเลิกการจองเรียบร้อยแล้วครับ");
-                  // ไม่ต้องคืนค่าปุ่มกลับ เพราะเดี๋ยว onSnapshot จะทำงานและซ่อนปุ่มไปเอง
-                } catch (error) {
-                  console.error("Error cancelling:", error);
-                  alert("ยกเลิกไม่สำเร็จ: " + error.message);
-                  btnCancel.innerText = originalText;
-                  btnCancel.disabled = false;
-                }
+                // Transaction: อัปเดต status + ลด counter พร้อมกัน
+                await db.runTransaction(async (transaction) => {
+                  const slotDoc = await transaction.get(slotRef);
+                  const currentCount = slotDoc.exists
+                    ? slotDoc.data().count
+                    : 0;
+
+                  transaction.update(bookingRef, { status: "CANCELLED" });
+                  transaction.set(
+                    slotRef,
+                    { count: Math.max(0, currentCount - 1) },
+                    { merge: true },
+                  );
+                });
+
+                // แจ้ง LINE หลัง transaction สำเร็จ
+                sendLineNotify({
+                  type: "cancel",
+                  code: bookingData.bookingCode,
+                  name: bookingData.name,
+                  phone: bookingData.phone,
+                  date: bookingData.date,
+                  time: bookingData.timeSlot,
+                });
+
+                alert("ยกเลิกการจองเรียบร้อยแล้วครับ");
+                // onSnapshot จะซ่อนปุ่มให้อัตโนมัติ
+              } catch (error) {
+                console.error("Error cancelling:", error);
+                alert("ยกเลิกไม่สำเร็จ: " + error.message);
+                btnCancel.innerText = originalText;
+                btnCancel.disabled = false;
               }
             };
           } else {
@@ -146,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================
-//  ฟังก์ชันแจ้งเตือน LINE
+// ฟังก์ชันแจ้งเตือน LINE Notify
 // ==========================================
 async function sendLineNotify(bookingData) {
   const scriptURL =

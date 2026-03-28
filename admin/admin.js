@@ -199,11 +199,11 @@ function startAdminSystem() {
               ? "bg-red-50 text-red-600 border-red-200"
               : "bg-white text-stone-600 border-stone-200";
             slotControls.innerHTML += `<button 
-              data-slot="${slot}" 
-              data-blocked="${isBlocked}" 
-              class="btn-toggle-slot px-4 py-2 text-xs font-bold border rounded-lg transition-all ${btnClass}">
-              ${slot}
-            </button>`;
+            data-slot="${slot}" 
+            data-blocked="${isBlocked}" 
+            class="btn-toggle-slot px-4 py-2 text-xs font-bold border rounded-lg transition-all ${btnClass}">
+            ${slot}
+          </button>`;
           });
         }
 
@@ -231,7 +231,6 @@ function startAdminSystem() {
       const docRef = db.collection("settings").doc("system");
 
       btn.disabled = true;
-
       try {
         if (currentlyBlocked) {
           await docRef.update({
@@ -301,7 +300,7 @@ function startAdminSystem() {
   }
 
   // ==========================================
-  // ระบบ BOOKING LIST 
+  // ระบบ BOOKING LIST
   // ==========================================
   function loadBookings() {
     db.collection("bookings")
@@ -367,22 +366,22 @@ function startAdminSystem() {
 
       htmlContent += `
         <div class="bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm flex flex-col h-full transition-all hover:shadow-md">
-            <div class="px-5 py-3.5 ${headerBg} flex justify-between items-center transition-colors">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span class="font-bold text-xl font-serif tracking-wider">${slotTime}</span>
-                </div>
-                <span class="text-xs px-2.5 py-1 ${badgeStyle} rounded-md font-bold tracking-widest">
-                    ${currentCount} / ${currentMaxJeeps} คัน
-                </span>
+          <div class="px-5 py-3.5 ${headerBg} flex justify-between items-center transition-colors">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span class="font-bold text-xl font-serif tracking-wider">${slotTime}</span>
             </div>
-            <div class="p-3.5 flex-1 flex flex-col gap-3 bg-stone-50/50">`;
+            <span class="text-xs px-2.5 py-1 ${badgeStyle} rounded-md font-bold tracking-widest">
+              ${currentCount} / ${currentMaxJeeps} คัน
+            </span>
+          </div>
+          <div class="p-3.5 flex-1 flex flex-col gap-3 bg-stone-50/50">`;
 
       if (!hasAnyBookings) {
         htmlContent += `
-            <div class="flex flex-col items-center justify-center h-full text-stone-300 py-8 opacity-70">
-                <span class="text-sm font-medium tracking-wide">ยังไม่มีคิวจอง</span>
-            </div>`;
+          <div class="flex flex-col items-center justify-center h-full text-stone-300 py-8 opacity-70">
+            <span class="text-sm font-medium tracking-wide">ยังไม่มีคิวจอง</span>
+          </div>`;
       } else {
         slotBookings.forEach((data) => {
           const isCancelled = data.status === "CANCELLED";
@@ -396,40 +395,43 @@ function startAdminSystem() {
                 : `<span class="bg-red-50 text-red-600 border border-red-200 px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wider">ยกเลิกแล้ว</span>`;
 
           htmlContent += `
-                <div class="bg-white p-4 rounded-xl border border-stone-100 shadow-sm flex flex-col gap-3 relative transition-all hover:border-[#8ba37a]/50 ${cardOpacity}">
-                    <div class="flex justify-between items-start gap-2">
-                        <div class="flex-1">
-                            <p class="font-bold text-base text-stone-800 leading-none mb-2">${data.name}</p>
-                            <p class="text-[10px] text-stone-500 mb-2 leading-none">Date: ${data.date}</p>
-                            <span class="inline-block bg-stone-100 text-stone-500 text-[10px] px-2 py-0.5 rounded uppercase tracking-widest font-mono border border-stone-200">
-                                Ref: ${data.bookingCode}
-                            </span>
-                        </div>
-                        <div>${statusBadge}</div>
-                    </div>
-                    <div class="flex items-center gap-2 text-sm text-stone-600 bg-stone-50 px-3 py-2 rounded-lg border border-stone-100 mt-1">
-                        <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                        <span class="font-medium tracking-wide">${data.phone}</span>
-                    </div>
-                    ${
-                      !isCancelled
-                        ? `
-                    <div class="flex gap-2 w-full pt-1">
-                        ${
-                          data.status === "PENDING"
-                            ? `
-                            <button data-id="${data.id}" data-status="CONFIRMED" class="btn-update-status flex-1 bg-[#8ba37a] text-white py-2 rounded-lg text-[11px] font-bold tracking-wider shadow-sm hover:bg-[#6a805b] active:scale-95 transition">
-                                รับคิว (CONFIRM)
-                            </button>`
-                            : ""
-                        }
-                        <button data-id="${data.id}" data-status="CANCELLED" class="btn-update-status flex-1 bg-white border border-red-200 text-red-500 py-2 rounded-lg text-[11px] font-bold tracking-wider hover:bg-red-50 active:scale-95 transition">
-                            ยกเลิก
-                        </button>
-                    </div>`
-                        : ""
-                    }
-                </div>`;
+            <div class="bg-white p-4 rounded-xl border border-stone-100 shadow-sm flex flex-col gap-3 relative transition-all hover:border-[#8ba37a]/50 ${cardOpacity}">
+              <div class="flex justify-between items-start gap-2">
+                <div class="flex-1">
+                  <p class="font-bold text-base text-stone-800 leading-none mb-2">${data.name}</p>
+                  <p class="text-[10px] text-stone-500 mb-2 leading-none">Date: ${data.date}</p>
+                  <span class="inline-block bg-stone-100 text-stone-500 text-[10px] px-2 py-0.5 rounded uppercase tracking-widest font-mono border border-stone-200">
+                    Ref: ${data.bookingCode}
+                  </span>
+                </div>
+                <div>${statusBadge}</div>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-stone-600 bg-stone-50 px-3 py-2 rounded-lg border border-stone-100 mt-1">
+                <svg class="w-4 h-4 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                <span class="font-medium tracking-wide">${data.phone}</span>
+              </div>
+              ${
+                !isCancelled
+                  ? `
+              <div class="flex gap-2 w-full pt-1">
+                ${
+                  data.status === "PENDING"
+                    ? `
+                <button data-id="${data.id}" data-status="CONFIRMED"
+                  class="btn-update-status flex-1 bg-[#8ba37a] text-white py-2 rounded-lg text-[11px] font-bold tracking-wider shadow-sm hover:bg-[#6a805b] active:scale-95 transition">
+                  รับคิว (CONFIRM)
+                </button>`
+                    : ""
+                }
+                <button data-id="${data.id}" data-status="CANCELLED"
+                  data-date="${data.date}" data-time="${data.timeSlot}"
+                  class="btn-update-status flex-1 bg-white border border-red-200 text-red-500 py-2 rounded-lg text-[11px] font-bold tracking-wider hover:bg-red-50 active:scale-95 transition">
+                  ยกเลิก
+                </button>
+              </div>`
+                  : ""
+              }
+            </div>`;
         });
       }
 
@@ -439,6 +441,10 @@ function startAdminSystem() {
     container.innerHTML = htmlContent;
   }
 
+  // ==========================================
+  // จัดการปุ่ม Confirm / Cancel
+  // ยกเลิก: ใช้ Transaction ลด counter slots ด้วย
+  // ==========================================
   if (container) {
     container.addEventListener("click", async (e) => {
       const btn = e.target.closest(".btn-update-status");
@@ -447,22 +453,45 @@ function startAdminSystem() {
       const docId = btn.dataset.id;
       const newStatus = btn.dataset.status;
 
-      if (confirm("ยืนยันการเปลี่ยนสถานะ?")) {
-        btn.disabled = true;
-        const originalText = btn.innerText;
-        btn.innerText = "อัปเดต...";
+      if (!confirm("ยืนยันการเปลี่ยนสถานะ?")) return;
 
-        try {
+      btn.disabled = true;
+      const originalText = btn.innerText;
+      btn.innerText = "อัปเดต...";
+
+      try {
+        if (newStatus === "CANCELLED") {
+          // ดึง date/time จาก dataset ที่ฝังไว้ใน button แล้ว
+          const date = btn.dataset.date;
+          const time = btn.dataset.time;
+          const slotKey = `${date}_${time}`;
+          const slotRef = db.collection("slots").doc(slotKey);
+          const bookingRef = db.collection("bookings").doc(docId);
+
+          // Transaction: อัปเดต status + ลด counter พร้อมกัน
+          await db.runTransaction(async (transaction) => {
+            const slotDoc = await transaction.get(slotRef);
+            const currentCount = slotDoc.exists ? slotDoc.data().count : 0;
+
+            transaction.update(bookingRef, { status: "CANCELLED" });
+            transaction.set(
+              slotRef,
+              { count: Math.max(0, currentCount - 1) },
+              { merge: true },
+            );
+          });
+        } else {
+          // CONFIRM — ไม่ต้องแตะ counter
           await db
             .collection("bookings")
             .doc(docId)
             .update({ status: newStatus });
-        } catch (err) {
-          console.error(err);
-          btn.disabled = false;
-          btn.innerText = originalText;
-          alert("เกิดข้อผิดพลาด");
         }
+      } catch (err) {
+        console.error(err);
+        btn.disabled = false;
+        btn.innerText = originalText;
+        alert("เกิดข้อผิดพลาด");
       }
     });
   }
