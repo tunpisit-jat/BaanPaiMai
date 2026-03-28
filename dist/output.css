@@ -71,6 +71,7 @@
     --font-weight-light: 300;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
+    --font-weight-semibold: 600;
     --font-weight-bold: 700;
     --tracking-wide: 0.025em;
     --tracking-wider: 0.05em;
@@ -571,6 +572,9 @@
   }
   .max-w-md {
     max-width: var(--container-md);
+  }
+  .max-w-prose {
+    max-width: 65ch;
   }
   .max-w-sm {
     max-width: var(--container-sm);
@@ -1168,6 +1172,10 @@
   .text-\[13px\] {
     font-size: 13px;
   }
+  .leading-\[1\.8\] {
+    --tw-leading: 1.8;
+    line-height: 1.8;
+  }
   .leading-none {
     --tw-leading: 1;
     line-height: 1;
@@ -1199,6 +1207,10 @@
   .font-normal {
     --tw-font-weight: var(--font-weight-normal);
     font-weight: var(--font-weight-normal);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-semibold);
   }
   .tracking-\[0\.2em\] {
     --tw-tracking: 0.2em;
@@ -1233,9 +1245,6 @@
   }
   .text-\[\#2c2c2c\]\/70 {
     color: color-mix(in oklab, #2c2c2c 70%, transparent);
-  }
-  .text-\[\#2c2c2c\]\/80 {
-    color: color-mix(in oklab, #2c2c2c 80%, transparent);
   }
   .text-\[\#6a805b\] {
     color: #6a805b;
@@ -1594,13 +1603,6 @@
       }
     }
   }
-  .hover\:bg-\[\#3a2a18\] {
-    &:hover {
-      @media (hover: hover) {
-        background-color: #3a2a18;
-      }
-    }
-  }
   .hover\:bg-\[\#6a805b\] {
     &:hover {
       @media (hover: hover) {
@@ -1793,6 +1795,11 @@
       margin-top: calc(var(--spacing) * 4);
     }
   }
+  .md\:mt-5 {
+    @media (width >= 48rem) {
+      margin-top: calc(var(--spacing) * 5);
+    }
+  }
   .md\:mt-16 {
     @media (width >= 48rem) {
       margin-top: calc(var(--spacing) * 16);
@@ -1801,6 +1808,11 @@
   .md\:mb-6 {
     @media (width >= 48rem) {
       margin-bottom: calc(var(--spacing) * 6);
+    }
+  }
+  .md\:mb-8 {
+    @media (width >= 48rem) {
+      margin-bottom: calc(var(--spacing) * 8);
     }
   }
   .md\:mb-16 {
@@ -1826,6 +1838,11 @@
   .md\:hidden {
     @media (width >= 48rem) {
       display: none;
+    }
+  }
+  .md\:inline {
+    @media (width >= 48rem) {
+      display: inline;
     }
   }
   .md\:h-5 {
@@ -2148,6 +2165,12 @@
     @media (width >= 48rem) {
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+  }
+  .md\:text-xl {
+    @media (width >= 48rem) {
+      font-size: var(--text-xl);
+      line-height: var(--tw-leading, var(--text-xl--line-height));
     }
   }
   .md\:text-xs {
